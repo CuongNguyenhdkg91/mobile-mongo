@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 type Post = {
@@ -18,6 +18,9 @@ const App= () => {
 
   const [data, setData] = useState<Post[]>([]);
   
+  const [index, setindex] = useState(0);
+  const [row, setrow] = useState<Post>();
+
   const getdata = async () => {
     try {
     const response = await fetch('https://api-node-test-one.vercel.app')
@@ -33,6 +36,10 @@ const App= () => {
     getdata();
   }, []);
 
+  useEffect(() => {
+    setrow(data[index]) 
+  },[index])
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -40,12 +47,17 @@ const App= () => {
       keyExtractor={({id}) => id}
       renderItem={({item}) => (
       <>
-      <Text>{item.title}</Text>
-      <Image         
-      style={styles.tinyLogo}
-      source = {{
-          uri: item.content,
-        }} />
+      <Text>{item.title + ' - ' + index + ' - ' + row.title}</Text>
+      <TouchableOpacity onPress={() => {
+        setindex(index >= (data.length-1)? 0 : index+1)
+      }} >
+        <Image         
+        style={styles.tinyLogo}
+        source = {{
+            uri: item.content,
+          }}
+        />
+      </TouchableOpacity>
       </>
       )}
       />
