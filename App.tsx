@@ -40,10 +40,6 @@ const App= () => {
     getdata();
    }, []);
 
-  useEffect(() => {
-    setitem(data[index]) 
-  },[index])
-
   return (
     <>
     <View style={styles.container}>
@@ -51,17 +47,16 @@ const App= () => {
       <TouchableOpacity 
       onPress={() => {
         setindex(index >= (data.length-1)? 0 : index+1)
-        setitem(data[index]) 
       }} >
         <Image  
         style={styles.tinyLogo}       
         source = {{
-            uri: rowitem.content,
+            uri: data[index].content,
           }}
         />
       </TouchableOpacity>
 
-      <Text style = {styles.title}>{rowitem.title +  ' - ' + index}</Text>
+      <Text style = {styles.title}>{data[index].title +  ' - ' + index}</Text>
 
       <StatusBar style="auto" />
     </View>
@@ -79,7 +74,7 @@ const styles = StyleSheet.create({
   },
 
   tinyLogo: {
-    position: 'absolute',
+    //position: 'absolute', //mess up the onPress listener
     width: 300,
     height: 300,
     left: 37,
@@ -93,7 +88,6 @@ height: 90,
 left: 43,
 top: 423,
 
-fontFamily: 'Times New Roman',
 fontStyle: 'normal',
 
 fontWeight: '600',
