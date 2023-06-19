@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity, TouchableHighlight } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
 type Post = {
@@ -44,7 +44,7 @@ const App= () => {
     <>
     <View style={styles.container}>
 
-      <TouchableOpacity 
+      <TouchableHighlight style={styles.circle}
       onPress={() => {
         setindex(index >= (data.length-1)? 0 : index+1)
       }} >
@@ -54,7 +54,7 @@ const App= () => {
             uri: data[index].content,
           }}
         />
-      </TouchableOpacity>
+      </TouchableHighlight>
 
       <Text style = {styles.title}>{data[index].title +  ' - ' + index}</Text>
 
@@ -75,11 +75,12 @@ const styles = StyleSheet.create({
 
   tinyLogo: {
     //position: 'absolute', //mess up the onPress listener
-    width: 300,
-    height: 300,
-    left: 37,
-    top: 127,
-  },
+    //left: 37,
+    //top: 127,
+    width: 230,
+    height: 180,
+
+    },
   
 title: {
 position: 'absolute',
@@ -96,6 +97,18 @@ lineHeight: 45,
 textAlign: 'center',
 color: '#FFFFFF',
   },
+
+circle: {
+  position: 'absolute',
+  left: 37,
+  top: 127,
+  width: 300,
+  height: 300,
+  borderRadius: 150,
+  backgroundColor: '#FFFFFF',
+  alignItems: 'center',
+  justifyContent: 'center',
+}
 
 });
 
