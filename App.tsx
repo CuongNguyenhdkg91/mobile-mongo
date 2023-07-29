@@ -1,6 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity, TouchableHighlight, ScrollView, Dimensions } from 'react-native';
 import React, {useEffect, useState} from 'react';
+import OneItem from './component/SingleItem';
+import { colors, sizes } from './component/theme';
 
 type Post = {
   id?: string;
@@ -10,106 +12,166 @@ type Post = {
   authorId?: string;
 };
 
-
-//const who = 'HUHU'
-
+const {width} = Dimensions.get("window")
 
 const App= () => {
 
-  const samplePost: Post = {title:"gogo", content: "https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg"}
-
-  const [data, setData] = useState<Post[]>([samplePost]);
-  
-  const [index, setindex] = useState<number>(0);
-  const [rowitem, setitem] = useState<Post>(samplePost);
-
+  const [data, setData] = useState<Post[]>();
   const getdata = async () => {
     try {
     const response = await fetch('https://api-node-test-one.vercel.app')
     const json = await response.json()
     setData(json)
-    setitem(json[0])
-
+  
     }
     catch (error){
       console.log(error)
     }
   }
-
+  
   useEffect(() => {
     getdata();
    }, []);
 
-  return (
-    <>
-    <View style={styles.container}>
 
-      <TouchableHighlight style={styles.circle}
-      onPress={() => {
-        setindex(index >= (data.length-1)? 0 : index+1)
-      }} >
-        <Image  
-        style={styles.tinyLogo}       
-        source = {{
-            uri: data[index].content,
-          }}
-        />
-      </TouchableHighlight>
+  const tabs = ["Single", "GridScroll", "GirdFlat", "Another"]
+  const [goto,setgoto] = useState('Single')
 
-      <Text style = {styles.title}>{data[index].title +  ' - ' + index}</Text>
+  const NavBar = () => {
+    return tabs.map(tab => {
+      return(
+      <TouchableOpacity key = {tab} style={styles.tab}
+        onPress={() => {setgoto(() => tab)}}
+      >
+        <Text style = {styles.navtext}> {tab} </Text>
+      </TouchableOpacity>
+      )
+    })}
 
-      <StatusBar style="auto" />
-    </View>
-    </>
-  );
-}
+    const gotopage = (state: string) => {
+      switch (state) {
+        case 'Single':
+          return <OneItem />
+        case 'GridScroll':
+          return (
+          <ScrollView 
+          showsVerticalScrollIndicator = {false} 
+          style={{ marginTop: sizes.base*3,
+            paddingVertical: sizes.base*2}}
+          >
+            <View style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
 
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#492B8C',
-    
-    flex: 1,
-/*  justifyContent: 'center', 
-    alignItems: 'center', */
-  },
+              flexWrap: 'wrap',
+              paddingHorizontal: sizes.base*1.5,
+              marginBottom: sizes.base * 3.5,
+              
+            }}>
+              {data?.map(item => (
+                <TouchableOpacity key= {item.id}>
+                  <View style = {styles.card} >
+                      <View style ={styles.badge}>
+                          <Image style = {{
+                              width: 100,
+                              height: 80,
+                          }}
+                          source = {{uri: item.content,}} />
+{/*                           <Image source = {require('./plants.png')} />
+                          <Image source = {require('./assets/favicon.png')} /> */}
+                      </View>
+                    <Text>{item.title}</Text>
+                  </View>
+                </TouchableOpacity>
+              )
+              )}
+            </View>  
+          </ScrollView>
 
-  tinyLogo: {
-    //position: 'absolute', //mess up the onPress listener
-    //left: 37,
-    //top: 127,
-    width: 230,
-    height: 180,
+          )
+        default:
+          return <></>
+      }
 
-    },
+    }
   
-title: {
-position: 'absolute',
-width: 272,
-height: 90,
-left: 43,
-top: 423,
-
-fontStyle: 'normal',
-
-fontWeight: '600',
-fontSize: 30,
-lineHeight: 45,
-textAlign: 'center',
-color: '#FFFFFF',
-  },
-
-circle: {
-  position: 'absolute',
-  left: 37,
-  top: 127,
-  width: 300,
-  height: 300,
-  borderRadius: 150,
-  backgroundColor: '#FFFFFF',
-  alignItems: 'center',
-  justifyContent: 'center',
-}
-
-});
+  return (
+  <View>
+    <View style = {styles.tabs}>
+      {NavBar()}
+    </View>
+      {gotopage(goto)}
+  </View>  
+  
+)}
 
 export default App
+
+const styles = StyleSheet.create({
+  tabs: {
+    //flex: 0,
+
+    flexDirection: 'row',
+    top: sizes.base * 4,
+
+    borderBottomColor: colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+
+    marginVertical: sizes.base,
+    marginHorizontal: sizes.base * 2,
+  },
+
+  tab: {
+    marginRight: sizes.base * 2,
+    paddingBottom: sizes.base,
+    borderBottomColor: colors.secondary,
+    borderBottomWidth: 3,
+  },
+
+  navtext: {
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.primary,
+  },
+
+  card: {
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    shadowColor: colors.black,
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 13,
+    elevation: 2,
+
+    backgroundColor: colors.white,  
+    borderRadius: sizes.radius,
+    padding: sizes.base + 4,
+    marginBottom: sizes.base,
+
+    minWidth: (width - sizes.padding * 2.4 - sizes.base) / 2,
+    maxWidth: (width - sizes.padding * 2.4 - sizes.base) / 2,
+    maxHeight: (width - sizes.padding * 2.4 - sizes.base) / 2,
+
+  },
+
+  badge: {
+    height: 120,
+    width: 120,
+    borderRadius: 120,
+    backgroundColor: 'rgba(41,216,143,0.2)' ,
+    
+    marginTop: 5,
+    marginRight: 0,
+    marginBottom: 5,
+    marginLeft: 0,
+
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+    
+
+})
+
