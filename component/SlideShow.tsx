@@ -1,37 +1,20 @@
 import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity, TouchableHighlight } from 'react-native';
 import React, {useEffect, useState} from 'react';
+import { useStore } from '../state/zustand/store';
 
-type Post = {
-    id?: string;
-    title: string;
-    content: string;
-    published?: boolean;
-    authorId?: string;
+import { Post } from '../type/type';
+
+type SlideProps = {
+    data: Post[]
   };
 
-const OneItem = () => {const samplePost: Post = {title:"gogo", content: "https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg"}
+const SlideShow: React.FC<SlideProps> = (props) => {
 
-const [data, setData] = useState<Post[]>([samplePost]);
+const {data} = props
+
+//const StoreData = useStore((state) => state.data)
 
 const [index, setindex] = useState<number>(0);
-const [rowitem, setitem] = useState<Post>(samplePost);
-
-const getdata = async () => {
-  try {
-  const response = await fetch('https://api-node-test-one.vercel.app')
-  const json = await response.json()
-  setData(json)
-  setitem(json[0])
-
-  }
-  catch (error){
-    console.log(error)
-  }
-}
-
-useEffect(() => {
-  getdata();
- }, []);
 
 return (
   <>
@@ -55,7 +38,17 @@ return (
 );
 }
 
-export default OneItem
+const samplePost: Post = {title:"gogo", content: "https://fujifilm-x.com/wp-content/uploads/2021/01/gfx100s_sample_04_thum-1.jpg"}
+
+const defaultProps: SlideProps = {
+  data: [samplePost]
+}
+
+SlideShow.defaultProps = defaultProps
+
+export default SlideShow
+
+
 
 const styles = StyleSheet.create({
 container: {
