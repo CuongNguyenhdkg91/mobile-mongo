@@ -5,7 +5,7 @@ import { useStore } from '../state/zustand/store';
 import { Post } from '../type/type';
 import { colors, sizes } from '../theme';
 
-const app = () => {
+const OneItem = () => {
 
   const StoreData = useStore((state) => state.data)
   //const GetStoreData = useStore((state) => state.getdata) // use in common component not use here
@@ -17,11 +17,12 @@ const app = () => {
   return (
   <View>
       <SlideShow data={StoreData} />  
+
       
   </View>  
   
 )}
 
-export default app
+export default OneItem
 
 

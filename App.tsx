@@ -3,15 +3,24 @@ import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity, TouchableHigh
 import React, {Component, useEffect, useState} from 'react';
 import { colors, sizes } from './theme';
 import { useStore } from './state/zustand/store';
+import { NavigationContainer } from '@react-navigation/native';
+
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Icon from 'react-native-ionicons'; 
+import * as Font from 'expo-font';
+import Ionicons from '@expo/vector-icons/Ionicons';
+
+
 
 import OneItem from './app/OneItem';
 import Listings from './app/Listings';
 
 const {width} = Dimensions.get("window")
 
+const Tab = createBottomTabNavigator();
+
 const App= () => {
 
-  const tabs = ["Single", "GirdFlat", "Another", "GridScroll"]
   const [goto,setgoto] = useState('Single')
 
   const GetStoreData = useStore((state) => state.getdata) 
@@ -19,34 +28,40 @@ const App= () => {
       GetStoreData()
   }, []);
 
-  const NavBar = () => {
-    return tabs.map(tab => {
-      return(
-      <TouchableOpacity key = {tab} style={styles.tab}
-        onPress={() => {setgoto(() => tab)}}
-      >
-        <Text style = {styles.navtext}> {tab} </Text>
-      </TouchableOpacity>
-      )
-    })}
+/*   const loadfont = async () => {
+    await Font.loadAsync({
+        Ionicons: require('@expo/vector-icons/fonts/Ionicons.ttf'),
+    })}; */
 
-    const gotopage = (state: string) => {
-      switch (state) {
-        case 'Single':
-          return <OneItem />
-        case 'GridScroll':
-          return <Listings />
-        default:
-          return <></>
-      }
-    }
-  return (
-  <View>
-    <View style = {styles.tabs}>
-      {NavBar()}
-    </View>
-      {gotopage(goto)}
-  </View>  
+return (
+
+  <NavigationContainer>
+    <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName;
+        iconName = 'list'
+
+       /*  if (route.name === 'Single') {
+          iconName = focused
+            ? 'information-circle'
+            : 'information-circle-outline';
+        } else if (route.name === 'GridScroll') {
+          iconName = focused ? 'list' : 'list-box';
+        } */
+
+        // You can return any component that you like here!
+        
+        return <Ionicons name='list' size={size} color={color} />;
+      },
+      tabBarActiveTintColor: 'tomato',
+      tabBarInactiveTintColor: 'gray',
+    })}
+    >
+      <Tab.Screen name="Single" component={OneItem} />
+      <Tab.Screen name="GridScroll" component={Listings} />
+    </Tab.Navigator>
+  </NavigationContainer>
   
 )}
 

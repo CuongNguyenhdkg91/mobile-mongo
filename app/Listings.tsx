@@ -9,10 +9,10 @@ const {width} = Dimensions.get("window")
 const Listings = () => {
 
   const StoreData = useStore((state) => state.data)
-  const GetStoreData = useStore((state) => state.getdata)
+  //const GetStoreData = useStore((state) => state.getdata) // use in common component not use here
   
   useEffect(() => {
-    GetStoreData()
+    //GetStoreData()
    }, []);
  
   return (
