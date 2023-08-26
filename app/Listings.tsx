@@ -68,44 +68,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
 
-  card: {
-
-    alignItems: 'center',
-    justifyContent: 'center',
-
-    shadowColor: colors.black,
-    shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.1,
-    shadowRadius: 13,
-    elevation: 2,
-
-    backgroundColor: colors.white,  
-    borderRadius: sizes.radius,
-    padding: sizes.base + 4,
-    marginBottom: sizes.base,
-
-    minWidth: (width - sizes.padding * 2.4 - sizes.base) / 2,
-    maxWidth: (width - sizes.padding * 2.4 - sizes.base) / 2,
-    maxHeight: (width - sizes.padding * 2.4 - sizes.base) / 2,
-
-  },
-
-  badge: {
-    height: 120,
-    width: 120,
-    borderRadius: 120,
-    backgroundColor: 'rgba(41,216,143,0.2)' ,
-    
-    marginTop: 5,
-    marginRight: 0,
-    marginBottom: 5,
-    marginLeft: 0,
-
-    alignItems: 'center',
-    justifyContent: 'center',
-
-  },
-    
 
 })
 

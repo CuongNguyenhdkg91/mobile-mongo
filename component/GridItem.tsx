@@ -3,61 +3,60 @@ import { StyleSheet, Text, View, Image, FlatList,TouchableOpacity, TouchableHigh
 import React, {useEffect, useState} from 'react';
 import { colors, sizes } from '../theme';
 import { Post } from '../type/type';
+import { useStore } from '../state/zustand/store';
+import axios from 'axios';
+
+
+const {width} = Dimensions.get("window")
 
 type FrameProps = {
   item: Post
 }
 
-const {width} = Dimensions.get("window")
-
 const GridItem = (props: FrameProps) => {
+
+  const GetStoreData = useStore((state) => state.getdata) 
+  const FilterGrid = useStore((state) => state.filterItem)
 
   const{item}= props
 
-  return (
-                <TouchableOpacity >
-                  <View style = {styles.card} >
-                      <View style ={styles.badge}>
-                          <Image style = {{
-                              width: 100,
-                              height: 80,
-                          }}
-                          source = {{uri: item.content,}} />
-                      </View>
-                    <Text>{item.title}</Text>
-                  </View>
-                </TouchableOpacity>
- 
+return (
+  <View style = {styles.card} >
+    <TouchableOpacity style ={styles.badge} 
+                      onPress={()=>{
+                        //FilterGrid(item.id)
+                        axios.put('https://web-app-next-lac.vercel.app/api/ChangeShow',{id:item.id,published:true})
+                      }}>
+      {/* <View style ={styles.badge}></View> */}
+    </TouchableOpacity>
+    <Image style = {{
+        //position: 'absolute',
+        width: 180,
+        //height: 120,
+        height: 200,
+        resizeMode:'contain'
+    }}
+    source = {{uri: item.content,}} />
+    <TouchableOpacity onPress={()=>{
+/*       axios.delete(`https://https://web-app-next-lac.vercel.app//api/DeleteItem/${item.id}`)
+      .then(()=> {
+
+        GetStoreData()
+      }) */
+      GetStoreData()
+      //console.log(item.id)
+    }}>
+      <Text>{item.title}</Text>
+      {/* <Text>{item.id}</Text> */}
+      {/* <Text>{(width - sizes.padding * 2.4 - sizes.base)/1.5}</Text> */}
+    </TouchableOpacity>
+  </View>
+
 )}
 
 export default GridItem
 
 const styles = StyleSheet.create({
-  tabs: {
-    //flex: 0,
-
-    flexDirection: 'row',
-    top: sizes.base * 4,
-
-    borderBottomColor: colors.gray2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-
-    marginVertical: sizes.base,
-    marginHorizontal: sizes.base * 2,
-  },
-
-  tab: {
-    marginRight: sizes.base * 2,
-    paddingBottom: sizes.base,
-    borderBottomColor: colors.secondary,
-    borderBottomWidth: 3,
-  },
-
-  navtext: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.primary,
-  },
 
   card: {
 
@@ -72,25 +71,30 @@ const styles = StyleSheet.create({
 
     backgroundColor: colors.white,  
     borderRadius: sizes.radius,
-    padding: sizes.base + 4,
+    //padding: sizes.base + 0,
     marginBottom: sizes.base,
 
-    minWidth: (width - sizes.padding * 2.4 - sizes.base) / 2,
-    maxWidth: (width - sizes.padding * 2.4 - sizes.base) / 2,
-    maxHeight: (width - sizes.padding * 2.4 - sizes.base) / 2,
+    minWidth: (width - sizes.padding * 1 - sizes.base) / 2,
+    maxWidth: (width - sizes.padding * 1 - sizes.base) / 2,
+    maxHeight: (width - sizes.padding * 2.4 - sizes.base)/1.5+20,
 
   },
 
   badge: {
-    height: 120,
-    width: 120,
-    borderRadius: 120,
-    backgroundColor: 'rgba(41,216,143,0.2)' ,
+    height: 15,
+    width: 15,
+    borderRadius: 15,
+    paddingLeft: 30,
+    backgroundColor: 'rgba(255, 73, 13,0.2)' ,
     
-    marginTop: 5,
-    marginRight: 0,
+    position:'absolute',
+    top: 0,
+    left:5,
+    zIndex:10,
+/*     marginTop: 5,
     marginBottom: 5,
-    marginLeft: 0,
+    marginRight: 0,
+    marginLeft: 0, */
 
     alignItems: 'center',
     justifyContent: 'center',

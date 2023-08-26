@@ -11,10 +11,10 @@ const colors = {
   
   const sizes = {
     // global sizes
-    base: 16,
+    base: 5,
     font: 14,
     radius: 6,
-    padding: 25,
+    padding: 15,
   
     // font sizes
     h1: 26,
