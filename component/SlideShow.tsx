@@ -34,7 +34,7 @@ return (
       <View style={{
         alignItems: 'center'
       }}>
-        <Text style = {styles.title}>{(index+1) + ' - ' + data[index].title + ' - Lớp ' + data[index].grade}</Text>
+        <Text style = {styles.title}>{(index+1) + ' - ' + data[index].title + ' - Lớp ' + data[index].grade + ' - ' + (data[index].note === undefined? '' : data[index].note.join(' '))}</Text>
         <TouchableHighlight style={styles.circle}
                             onPress={() => {
                               setindex(index >= (data.length-1)? 0 : index+1)
@@ -57,12 +57,19 @@ return (
                     onSubmitEditing={(e)=>{
                       //console.log(e.nativeEvent.text)
                       const text = e.nativeEvent.text
-                      var title = text.match(/\D*/)[0].trim()
-                      title = title ==''? data[index].title : title
+                      var title = text.match(/\D[a-z]\D*/)
+                      //console.log(title)
+                      //console.log(typeof title)
+                      //title ='' //to disable update title
+                      title = title === null? data[index].title : title[0].trim()
+                      console.log(title)
                       var grade = text.match(/[0-9]*$/)[0]
-                      grade = grade ==''? data[index].grade : grade
-                      console.log({id:data[index].id,title:title,grade:grade})
-                      axios.put('https://web-app-next-lac.vercel.app/api/AddText',{id:data[index].id,title:title,grade:grade})
+                      grade = grade === null? data[index].grade : grade //check with null not ''
+                      //console.log({id:data[index].id,title:title,grade:grade}) 
+                      var note = text.match(/[A-Z]{2}/g)
+                      note = note === null ? data[index].note : note
+                      //console.log(note)
+                      axios.put('https://web-app-next-lac.vercel.app/api/AddText',{id:data[index].id,title:title,grade:grade,note:note})
                       //.then (res => console.log(res.data))
                       //const check = new RegExp('[0-9]*$')
                       //console.log(check.exec(text))

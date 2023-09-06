@@ -5,4 +5,5 @@ export type Post = {
     grade?: string
     published?: boolean;
     authorId?: string;
+    note: string[]
   };
