@@ -23,32 +23,45 @@ const [index, setindex] = useState<number>(0);
 return (
 
   <View style={{
+    //flex: 1,
+
     //backgroundColor: '#492B8C',
-    //height: '40%',
+    height: '100%',
     //padding: 24,
-    flex: 1,
+
     //alignItems: 'center',
-    justifyContent: 'flex-start', //not work keyboard avoid if no
+    // justifyContent: 'flex-start', //not work keyboard avoid if no
     //gap:20
   }}>
-      <View style={{
-        alignItems: 'center'
-      }}>
+    
+{/*       <View style={{
+        // alignItems: 'center'
+      }}> */}
         <Text style = {styles.title}>{(index+1) + ' - ' + data[index].title + ' - Lớp ' + data[index].grade + ' - ' + (data[index].note === undefined? '' : data[index].note.join(' '))}</Text>
-        <TouchableHighlight style={styles.circle}
-                            onPress={() => {
-                              setindex(index >= (data.length-1)? 0 : index+1)
-                            }} >
-          <Image  
-          style={{width: 400, height: 300}}       
-          source = {{
-              uri: data[index].content,
-            }}
-          />
-        </TouchableHighlight>
-      </View>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{
+          
+          // marginTop: 70,
+          // marginBottom: 70,
+          // paddingTop: 70
+          flex: 1,
+          justifyContent: 'space-around'
+        }}>
+          <TouchableHighlight style={styles.circle}
+                              onPress={() => {
+                                setindex(index >= (data.length-1)? 0 : index+1)
+                              }} >
+            <Image  
+            style={{width: 550, height: 450}}       
+            source = {{
+                uri: data[index].content,
+              }}
+            />
+          </TouchableHighlight>
+        </KeyboardAvoidingView>
+      {/* </View> */}
 
-      <View>
+      <View style={styles.AvoidKeyboard}>
         <TextInput  style={styles.input}
                     // multiline
                     // numberOfLines={2}
@@ -62,10 +75,11 @@ return (
                       //console.log(typeof title)
                       //title ='' //to disable update title
                       title = title === null? data[index].title : title[0].trim()
-                      console.log(title)
-                      var grade = text.match(/[0-9]*$/)[0]
-                      grade = grade === null? data[index].grade : grade //check with null not ''
-                      //console.log({id:data[index].id,title:title,grade:grade}) 
+                      //console.log(title)
+                      // var grade = text.match(/[0-9]*$/) * return [""], use +
+                      var grade = text.match(/[0-9]+/)
+                      grade = grade === null? data[index].grade : grade[0] //check with null not ''
+                      console.log(grade)
                       var note = text.match(/[A-Z]{2}/g)
                       note = note === null ? data[index].note : note
                       //console.log(note)
@@ -94,6 +108,7 @@ export default SlideShow
 
 const styles = StyleSheet.create({
 
+//container class not used
 container: {
   //backgroundColor: '#492B8C',
   flex: 1,
@@ -110,12 +125,15 @@ container: {
 circle: {
   //position: 'absolute',
   //left: 37,
-  //top: 127,
-  width: 400,
-  height: 400,
+  // top: 70,
+  // marginTop:70,
+  //bottom: 0, //not work because it is relative postition
+  width: 350,
+  height: 350,
   borderRadius: 400,
   //margin: 10,
   backgroundColor: '#FFFFFF',
+  overflow: 'hidden',
 
   //flex: 1,
   //flexDirection: 'row',
@@ -136,20 +154,29 @@ fontStyle: 'normal',
 fontWeight: '600',
 fontSize: 30,
 zIndex: 10,
-//color: '#FFFFFF',
+color: '#FFFFFF',
 //lineHeight: 45,
-
-
-
 },
 
 input: {
   //height: 45,
-  margin: 12,
+  // margin: 60,
   borderWidth: 1,
+  width: 300,
+  // margin:0, not work
   //padding: 10,
   fontSize: 30,
   backgroundColor: '#FFFFFF'
 },
+
+AvoidKeyboard:{
+  position: 'absolute',
+  bottom: 0,
+  alignSelf:'center'
+  //backgroundColor: '#FFFFFF'
+  //alignContent: 'center', not work
+  //justifyContent: 'center', not work
+  //alignItems: 'center', not work
+}
 
 });

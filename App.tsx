@@ -39,23 +39,24 @@ return (
     <Tab.Navigator
     screenOptions={({ route }) => ({
       tabBarIcon: ({ focused, color, size }) => {
-        let iconName;
-        iconName = 'list'
-
-       /*  if (route.name === 'Single') {
-          iconName = focused
-            ? 'information-circle'
-            : 'information-circle-outline';
+      // let iconName: "link" | "search" | "chatbox" | "grid"
+      // iconName = "link"
+      var iconName: any =""
+       if (route.name === 'Single') {
+          // iconName = focused
+          //   ? 'information-circle'
+          //   : 'information-circle-outline';
+            iconName = 'chatbox'
         } else if (route.name === 'GridScroll') {
-          iconName = focused ? 'list' : 'list-box';
-        } */
-
+          // iconName = focused ? 'list' : 'list-box';
+          iconName = 'grid'
+        }
         // You can return any component that you like here!
-        
-        return <Ionicons name='list' size={size} color={color} />;
+
+        return <Ionicons name={iconName} size={size} color={color} />;
       },
-      tabBarActiveTintColor: 'tomato',
-      tabBarInactiveTintColor: 'gray',
+      tabBarActiveTintColor: 'green',
+      tabBarInactiveTintColor: 'brown',
     })}
     >
       <Tab.Screen name="Single" component={OneItem} />

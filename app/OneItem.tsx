@@ -21,16 +21,22 @@ const OneItem = () => {
 
   return (
   <View style={{
-    height: '80%'
+    // height: '100%',
+    backgroundColor: '#492B8C',
+    alignItems: 'center'
+    // padding: 100
+    // paddingBottom: 0,
+    // paddingTop: 100
   }}>
-    <KeyboardAvoidingView
+{/*     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{
-        flex:1,
-        backgroundColor: '#492B8C',
+        // flex:1,
+        // backgroundColor: '#492B8C',
       }}>
         <SlideShow data={StoreData} />  
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView> */}
+    <SlideShow data={StoreData} />
   </View>
   
 )}
